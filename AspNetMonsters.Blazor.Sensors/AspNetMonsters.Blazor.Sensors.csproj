@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageProjectUrl>https://github.com/AspNetMonsters/Blazor.Sensors</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/AspNetMonsters/Blazor.Sensors/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Simon Timms, David Paquette, James Chambers</Copyright>
+    <Description>Blazor interop for brower Sensor</Description>
+    <RepositoryUrl>https://github.com/AspNetMonsters/Blazor.Sensors</RepositoryUrl>
+    <PackageTags>Blazor Geolocation</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyName>AspNetMonsters.Blazor.Sensors</AssemblyName>
+    <RootNamespace>AspNetMonsters.Blazor.Sensors</RootNamespace>
+    <Version>0.1.0-preview1-1002</Version>
+
+    <DefaultItemExcludes>${DefaultItemExcludes};node_modules\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="dist\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Browser" Version="0.1.0-preview1-10071" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="0.1.0-preview1-10071" />
+  </ItemGroup>
+
+</Project>
