@@ -7,13 +7,15 @@
     <Copyright>Simon Timms, David Paquette, James Chambers</Copyright>
     <Description>Blazor interop for brower Sensor</Description>
     <RepositoryUrl>https://github.com/AspNetMonsters/Blazor.Sensors</RepositoryUrl>
-    <PackageTags>Blazor Geolocation</PackageTags>
+    <PackageTags>Blazor Sensors AmbientLightSensor</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>AspNetMonsters.Blazor.Sensors</AssemblyName>
     <RootNamespace>AspNetMonsters.Blazor.Sensors</RootNamespace>
-    <Version>0.1.0-preview1-1002</Version>
+    <Version>0.1.0-preview1-1004</Version>
 
     <DefaultItemExcludes>${DefaultItemExcludes};node_modules\**</DefaultItemExcludes>
+
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

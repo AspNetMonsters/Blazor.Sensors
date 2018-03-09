@@ -9,14 +9,20 @@ namespace AspNetMonsters.Blazor.Sensors
 {
     public class AmbientLightSensorService
     {
-        static IDictionary<Guid, Action<AmbientLightSensorReading>> _activeSensors = new Dictionary<Guid, Action<AmbientLightSensorReading>>();
-        public void StartReading(Action<AmbientLightSensorReading> onReading)
+        static IDictionary<Guid, AmbientLightSensor> _activeSensors = new Dictionary<Guid, AmbientLightSensor>();
+        public AmbientLightSensor StartReading(Action onReading)
         {
             var requestId = Guid.NewGuid();
-
-            _activeSensors.Add(requestId, onReading);
+            AmbientLightSensor sensor = new AmbientLightSensor(requestId);
+            sensor.OnReading = onReading;
+            _activeSensors.Add(requestId, sensor);
             RegisteredFunction.Invoke<object>("AspNetMonsters_Blazor_StartAmbientLightSensor", requestId);
-    
+            return sensor;
+        }
+
+        public void StopReading(AmbientLightSensor sensor)
+        {
+            RegisteredFunction.Invoke<object>("AspNetMonsters_Blazor_StopAmbientLightSensor", sensor.Id);
         }
 
         private static void ReceiveResponse(
@@ -25,15 +31,13 @@ namespace AspNetMonsters.Blazor.Sensors
             string activated,
             string illuminance)
         {
-            Action<AmbientLightSensorReading> callback;
+            AmbientLightSensor sensor;
             var idVal = Guid.Parse(id);
-            callback = _activeSensors.First(x => x.Key == idVal).Value;
-            callback(new AmbientLightSensorReading
-            {
-                HasReading = Convert.ToBoolean(hasReading),
-                Activated = Convert.ToBoolean(activated),
-                Illuminance = Convert.ToDecimal(illuminance)
-            });
+            sensor = _activeSensors.First(x => x.Key == idVal).Value;
+            sensor.HasReading = Convert.ToBoolean(hasReading);
+            sensor.Activated = Convert.ToBoolean(activated);
+            sensor.Illuminance = Convert.ToDecimal(illuminance);
+            sensor.OnReading();
         }
     }
 }

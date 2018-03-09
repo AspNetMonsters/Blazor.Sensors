@@ -3,10 +3,12 @@
 var registerFunction: (identifier: string, implementation: Function) => void = Blazor.registerFunction;
 var platform = Blazor.platform;
 var AmbientLightSensor: any;
+var sensors: object;
 
 registerFunction('AspNetMonsters_Blazor_StartAmbientLightSensor', (requestId) => {
     if ('AmbientLightSensor' in window) {
         var sensor = new AmbientLightSensor();
+        sensors[requestId] = sensor;
         sensor.onreading = function () {
             dispatchResponse(requestId, sensor.hasReading,
                 sensor.activated,
@@ -18,9 +20,19 @@ registerFunction('AspNetMonsters_Blazor_StartAmbientLightSensor', (requestId) =>
         sensor.start();
     }
     else {
-        return "No location finding";
+        return "No ambient light sensor available";
     }
 });
+
+registerFunction('AspNetMonsters_Blazor_StopAmbientLightSensor', (requestId) => {
+    if ('AmbientLightSensor' in window) {
+        if (sensors[requestId]) {
+            sensors[requestId].stop();
+            delete sensors[requestId];
+        }
+    }
+});
+
 
 let assemblyName = "AspNetMonsters.Blazor.Sensors";
 let namespace = "AspNetMonsters.Blazor.Sensors";

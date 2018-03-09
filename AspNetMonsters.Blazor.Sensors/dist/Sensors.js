@@ -2,9 +2,11 @@
 var registerFunction = Blazor.registerFunction;
 var platform = Blazor.platform;
 var AmbientLightSensor;
+var sensors;
 registerFunction('AspNetMonsters_Blazor_StartAmbientLightSensor', function (requestId) {
     if ('AmbientLightSensor' in window) {
         var sensor = new AmbientLightSensor();
+        sensors[requestId] = sensor;
         sensor.onreading = function () {
             dispatchResponse(requestId, sensor.hasReading, sensor.activated, sensor.illuminance);
         };
@@ -14,7 +16,15 @@ registerFunction('AspNetMonsters_Blazor_StartAmbientLightSensor', function (requ
         sensor.start();
     }
     else {
-        return "No location finding";
+        return "No ambient light sensor available";
+    }
+});
+registerFunction('AspNetMonsters_Blazor_StopAmbientLightSensor', function (requestId) {
+    if ('AmbientLightSensor' in window) {
+        if (sensors[requestId]) {
+            sensors[requestId].stop();
+            delete sensors[requestId];
+        }
     }
 });
 var assemblyName = "AspNetMonsters.Blazor.Sensors";
