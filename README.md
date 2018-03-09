@@ -17,7 +17,7 @@ This package provides Blazor applications with access to the browser sensor apis
 
     *Note:* Eventually, this JS file will be embedded in the nuget package but that feature of Blazor isn't released yet. For now, we are hosting the file in Azure blob storage to make it easy for you to reference the file.
 
-1) In your Blazor app's `Program.cs`, register the 'AmbientLightSensorService'.
+1) In your Blazor app's `Program.cs`, register the `AmbientLightSensorService`.
 
     ```
     var serviceProvider = new BrowserServiceProvider(configure =>
