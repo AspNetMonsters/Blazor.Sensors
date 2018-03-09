@@ -33,19 +33,36 @@ This package provides Blazor applications with access to the browser sensor apis
     @inject AmbientLightSensorService sensorService
     <h1>Let there be light!</h1>
 
-    <h3>@illuminance</h3>
+    <h3>@sensor?.Illuminance</h3>
+
+    <button @onclick(Stop)>Stop</button>
+    <button @onclick(Start)>Start</button>
+
     @functions 
     {
-        decimal illuminance;
+        AmbientLightSensor sensor;
 
         protected override void OnInit()
         {
-            sensorService.StartReading((result) =>
-            {
-                illuminance = result.Illuminance;
-                StateHasChanged();
+            Start();
+        }
 
+        private void Start()
+        {
+            sensor = sensorService.StartReading(() =>
+            {
+                StateHasChanged();
             });
         }
+
+        private void Stop()
+        {
+            if (sensor != null)
+            {
+                sensorService.StopReading(sensor);
+                sensor = null;
+            }
+        }
     }
+
     ```
