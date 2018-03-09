@@ -1,5 +1,5 @@
 # AspNetMonsters.Blazor.Sensors
-This package provides Blazor applications with access to the browser sensor apis. Currently only the `AmbientLightSensor` api is supported
+This package provides Blazor applications with access to the browser sensor apis. Currently only the [AmbientLightSensor api](https://developer.mozilla.org/en-US/docs/Web/API/AmbientLightSensor) is supported. 
 
 ## Usage
 1) In your Blazor app, add the `AspNetMonsters.Blazor.Sensors` [NuGet package](https://www.nuget.org/packages/AspNetMonsters.Blazor.Sensors/)
