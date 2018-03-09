@@ -3,7 +3,7 @@
 var registerFunction: (identifier: string, implementation: Function) => void = Blazor.registerFunction;
 var platform = Blazor.platform;
 var AmbientLightSensor: any;
-var sensors: object;
+var sensors: object = {};
 
 registerFunction('AspNetMonsters_Blazor_StartAmbientLightSensor', (requestId) => {
     if ('AmbientLightSensor' in window) {

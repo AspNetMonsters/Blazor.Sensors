@@ -2,7 +2,7 @@
 var registerFunction = Blazor.registerFunction;
 var platform = Blazor.platform;
 var AmbientLightSensor;
-var sensors;
+var sensors = {};
 registerFunction('AspNetMonsters_Blazor_StartAmbientLightSensor', function (requestId) {
     if ('AmbientLightSensor' in window) {
         var sensor = new AmbientLightSensor();
