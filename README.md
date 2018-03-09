@@ -8,46 +8,44 @@ This package provides Blazor applications with access to the browser sensor apis
     Install-Package AspNetMonsters.Blazor.Sensors -IncludePrerelease
     ```
 
-1) In your app's `index.html`, reference `https://blazor.blob.core.windows.net/bjs/Location.js`. Place this reference _after_ the `blazor-boot` script. 
+1) In your app's `index.html`, reference `https://blazor.blob.core.windows.net/bjs/Sensors.js`. Place this reference _after_ the `blazor-boot` script. 
 
     ```
     <script type="blazor-boot"></script>
-    <script src="https://blazor.blob.core.windows.net/bjs/Location.js"> </script>
+    <script src="https://blazor.blob.core.windows.net/bjs/Sensors.js"> </script>
     ```
 
     *Note:* Eventually, this JS file will be embedded in the nuget package but that feature of Blazor isn't released yet. For now, we are hosting the file in Azure blob storage to make it easy for you to reference the file.
 
-1) In your Blazor app's `Program.cs`, register the 'LocationService'.
+1) In your Blazor app's `Program.cs`, register the 'AmbientLightSensorService'.
 
     ```
     var serviceProvider = new BrowserServiceProvider(configure =>
     {
-        configure.AddSingleton<LocationService>();
+        configure.AddSingleton<AmbientLightSensorService>();
     });
     ```
 
-1) Now you can inject the LocationService into any Blazor page and use it like this:
+1) Now you can inject the `AmbientLightSensorService` into any Blazor page and use it like this:
 
     ```
-    @using AspNetMonsters.Blazor.Geolocation
-    @inject LocationService  LocationService
-    <h3>You are here</h3>
-    <div>
-    Lat: @location?.Latitude <br/>
-    Long: @location?.Longitude <br />
-    Accuracy: @location?.Accuracy <br />
-    </div>
+    @using AspNetMonsters.Blazor.Sensors
+    @inject AmbientLightSensorService sensorService
+    <h1>Let there be light!</h1>
 
-    @functions
+    <h3>@illuminance</h3>
+    @functions 
     {
-        Location location;
+        decimal illuminance;
 
-        protected override async Task OnInitAsync()
+        protected override void OnInit()
         {
-            location = await LocationService.GetLocationAsync();
+            sensorService.StartReading((result) =>
+            {
+                illuminance = result.Illuminance;
+                StateHasChanged();
+
+            });
         }
     }
     ```
-
-Success!
-![image](https://user-images.githubusercontent.com/2531875/37178457-c86888a0-22df-11e8-8667-d6f7eba80691.png)
