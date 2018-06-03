@@ -26,8 +26,10 @@ This package provides Blazor applications with access to the browser sensor apis
 
     <h3>@sensor?.Illuminance</h3>
 
-    <button @onclick(Stop)>Stop</button>
-    <button @onclick(Start)>Start</button>
+
+    <button onclick=@Stop>Stop</button>
+    <button onclick=@Start>Start</button>
+
 
     @functions 
     {
