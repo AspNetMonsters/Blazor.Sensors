@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
+﻿using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +10,28 @@ namespace AspNetMonsters.Blazor.Sensors
     public class AmbientLightSensorService
     {
         static IDictionary<Guid, AmbientLightSensor> _activeSensors = new Dictionary<Guid, AmbientLightSensor>();
-        public AmbientLightSensor StartReading(Action onReading)
+        public async Task<AmbientLightSensor> StartReading(Action onReading)
         {
             var requestId = Guid.NewGuid();
             AmbientLightSensor sensor = new AmbientLightSensor(requestId);
             sensor.OnReading = onReading;
             _activeSensors.Add(requestId, sensor);
-            RegisteredFunction.Invoke<object>("AspNetMonsters_Blazor_StartAmbientLightSensor", requestId);
+            await JSRuntime.Current.InvokeAsync<string>(
+                 "AspNetMonsters_Blazor_Sensors.startAmbientLightSensor", 
+                 new DotNetObjectRef(this),
+                 requestId);
             return sensor;
         }
 
-        public void StopReading(AmbientLightSensor sensor)
+        public async Task StopReading(AmbientLightSensor sensor)
         {
-            RegisteredFunction.Invoke<object>("AspNetMonsters_Blazor_StopAmbientLightSensor", sensor.Id);
+            await JSRuntime.Current.InvokeAsync<string>(
+                 "AspNetMonsters_Blazor_Sensors.stopAmbientLightSensor",
+                 sensor.Id);
         }
 
-        private static void ReceiveResponse(
+        [JSInvokable]
+        public void ReceiveResponse(
             string id,
             string hasReading,
             string activated,
