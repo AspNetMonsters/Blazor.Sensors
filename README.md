@@ -8,13 +8,10 @@ This package provides Blazor applications with access to the browser sensor apis
     Install-Package AspNetMonsters.Blazor.Sensors -IncludePrerelease
     ```
 
-1) In your Blazor app's `Program.cs`, register the `AmbientLightSensorService`.
+1) In your Blazor app's `Startup.cs` `ConfigureServices` method, register the `AmbientLightSensorService`.
 
     ```
-    var serviceProvider = new BrowserServiceProvider(configure =>
-    {
-        configure.AddSingleton<AmbientLightSensorService>();
-    });
+    services.AddSingleton<AmbientLightSensorService>();
     ```
 
 1) Now you can inject the `AmbientLightSensorService` into any Blazor page and use it like this:
@@ -29,31 +26,30 @@ This package provides Blazor applications with access to the browser sensor apis
     <button @onclick(Stop)>Stop</button>
     <button @onclick(Start)>Start</button>
 
-    @functions 
+    @functions
     {
         AmbientLightSensor sensor;
 
-        protected override void OnInit()
+        protected override async Task OnInitAsync()
         {
-            Start();
+            await Start();
         }
-
-        private void Start()
+        
+        private async Task Start()
         {
-            sensor = sensorService.StartReading(() =>
+            sensor = await sensorService.StartReading(() =>
             {
                 StateHasChanged();
             });
         }
 
-        private void Stop()
+        private async Task Stop()
         {
             if (sensor != null)
             {
-                sensorService.StopReading(sensor);
+                await sensorService.StopReading(sensor);
                 sensor = null;
             }
         }
     }
-
     ```
